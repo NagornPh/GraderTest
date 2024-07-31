@@ -1,11 +1,12 @@
 import streamlit as st
 import json
+import os
 from grader import load_problem, load_test_cases, execute_user_code
 
 # Load available problems
 problems = {
-    "problem1": "Modulo Operation Problem",
-    "problem2": "Another Problem"
+    "Pointing": "Pointing Problem",
+    "Stonks": "Stonks Problem"
 }
 
 st.title("Grader Website")
