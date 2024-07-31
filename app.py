@@ -69,10 +69,16 @@ with tab1:
     st.header("Pointing Problem")
     st.write(PROBLEMS["Pointing"]["description"])
 
-    uploaded_file = st.file_uploader("Upload your C++ code", type=["cpp"], key="pointing_upload")
+    cpp_code = st.text_area("Paste your C++ code here", height=300)
+    uploaded_file = st.file_uploader("Or upload a C++ file", type=["cpp"], key="pointing_upload")
+
     if uploaded_file is not None:
         cpp_code = uploaded_file.read().decode("utf-8")
-        if st.button("Submit Code", key="pointing_submit"):
+
+    if st.button("Submit Code", key="pointing_submit"):
+        if not cpp_code:
+            st.warning("Please provide your C++ code.")
+        else:
             with st.spinner("Grading..."):
                 results = grade_problem(PROBLEMS["Pointing"]["folder"], cpp_code)
             st.success("Grading complete!")
@@ -88,10 +94,16 @@ with tab2:
     st.header("Stonks Problem")
     st.write(PROBLEMS["Stonks"]["description"])
 
-    uploaded_file = st.file_uploader("Upload your C++ code", type=["cpp"], key="stonks_upload")
+    cpp_code = st.text_area("Paste your C++ code here", height=300, key="stonks_code")
+    uploaded_file = st.file_uploader("Or upload a C++ file", type=["cpp"], key="stonks_upload")
+
     if uploaded_file is not None:
         cpp_code = uploaded_file.read().decode("utf-8")
-        if st.button("Submit Code", key="stonks_submit"):
+
+    if st.button("Submit Code", key="stonks_submit"):
+        if not cpp_code:
+            st.warning("Please provide your C++ code.")
+        else:
             with st.spinner("Grading..."):
                 results = grade_problem(PROBLEMS["Stonks"]["folder"], cpp_code)
             st.success("Grading complete!")
