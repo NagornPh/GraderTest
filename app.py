@@ -61,9 +61,26 @@ def grade_problem(problem_folder, cpp_code):
     return results
 
 # Streamlit app
-st.title("The New And Better PDS Grader")
+st.title("Grader Website")
 
 tab1, tab2 = st.tabs(["Pointing", "Stonks"])
+
+def display_results(results):
+    num_passed = sum(result[1] for result in results)
+    score = num_passed * 10
+    percentage_score = (num_passed / 10) * 100
+
+    st.write(f"## Results")
+    st.write(f"Score: {score} / 100")
+    st.write(f"Percentage: {percentage_score:.2f}%")
+
+    for idx, result in enumerate(results):
+        if result[1]:
+            st.write(f"Test case {result[0]}: ✅ Passed")
+        else:
+            st.write(f"Test case {result[0]}: ❌ Failed")
+            st.write(f"Expected: {result[3]}")
+            st.write(f"Got: {result[2]}")
 
 with tab1:
     st.header("Pointing Problem")
@@ -82,13 +99,7 @@ with tab1:
             with st.spinner("Grading..."):
                 results = grade_problem(PROBLEMS["Pointing"]["folder"], cpp_code)
             st.success("Grading complete!")
-            for idx, result in enumerate(results):
-                if result[1]:
-                    st.write(f"Test case {result[0]}: ✅ Passed")
-                else:
-                    st.write(f"Test case {result[0]}: ❌ Failed")
-                    st.write(f"Expected: {result[3]}")
-                    st.write(f"Got: {result[2]}")
+            display_results(results)
 
 with tab2:
     st.header("Stonks Problem")
@@ -107,10 +118,4 @@ with tab2:
             with st.spinner("Grading..."):
                 results = grade_problem(PROBLEMS["Stonks"]["folder"], cpp_code)
             st.success("Grading complete!")
-            for idx, result in enumerate(results):
-                if result[1]:
-                    st.write(f"Test case {result[0]}: ✅ Passed")
-                else:
-                    st.write(f"Test case {result[0]}: ❌ Failed")
-                    st.write(f"Expected: {result[3]}")
-                    st.write(f"Got: {result[2]}")
+            display_results(results)
