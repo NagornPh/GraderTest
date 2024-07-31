@@ -72,7 +72,6 @@ def display_results(results):
 
     st.write(f"## Results")
     st.write(f"Score: {score} / 100")
-    st.write(f"Percentage: {percentage_score:.2f}%")
 
     for idx, result in enumerate(results):
         if result[1]:
