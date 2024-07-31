@@ -1,39 +1,104 @@
 import streamlit as st
-import json
 import os
-from grader import load_problem, load_test_cases, execute_user_code
+import subprocess
+from tempfile import NamedTemporaryFile
 
-# Load available problems
-problems = {
-    "Pointing": "Pointing Problem",
-    "Stonks": "Stonks Problem"
+# Problem configurations
+PROBLEMS = {
+    "Pointing": {
+        "description": "Description of the pointing problem...",
+        "folder": "Problems/Pointing"
+    },
+    "Stonks": {
+        "description": "Description of the stonks problem...",
+        "folder": "Problems/Stonks"
+    }
 }
 
+def run_cpp_code(cpp_code, input_data):
+    # Write the code to a temporary file
+    with NamedTemporaryFile(delete=False, suffix=".cpp") as cpp_file:
+        cpp_file.write(cpp_code.encode('utf-8'))
+        cpp_file_path = cpp_file.name
+
+    # Compile the C++ code
+    exe_file_path = cpp_file_path.replace('.cpp', '')
+    compile_process = subprocess.run(['g++', cpp_file_path, '-o', exe_file_path], capture_output=True, text=True)
+    
+    if compile_process.returncode != 0:
+        return compile_process.stderr, None
+
+    # Run the compiled code with input_data
+    run_process = subprocess.run([exe_file_path], input=input_data, capture_output=True, text=True)
+
+    # Clean up the temporary files
+    os.remove(cpp_file_path)
+    os.remove(exe_file_path)
+
+    return None, run_process.stdout.strip()
+
+def grade_problem(problem_folder, cpp_code):
+    results = []
+
+    for i in range(1, 11):
+        input_file = os.path.join(problem_folder, f"{i}.in")
+        output_file = os.path.join(problem_folder, f"{i}.out")
+
+        with open(input_file, 'r') as f:
+            input_data = f.read()
+
+        with open(output_file, 'r') as f:
+            expected_output = f.read().strip()
+
+        error, user_output = run_cpp_code(cpp_code, input_data)
+        
+        if error:
+            results.append((i, False, error))
+        else:
+            passed = user_output == expected_output
+            results.append((i, passed, user_output, expected_output))
+    
+    return results
+
+# Streamlit app
 st.title("Grader Website")
 
-st.sidebar.title("Select a Problem")
-problem_id = st.sidebar.selectbox("Problem", list(problems.keys()), format_func=lambda x: problems[x])
+tab1, tab2 = st.tabs(["Pointing", "Stonks"])
 
-problem = load_problem(problem_id)
-test_cases = load_test_cases(problem_id)
+with tab1:
+    st.header("Pointing Problem")
+    st.write(PROBLEMS["Pointing"]["description"])
 
-st.header(problem["title"])
-st.write(problem["description"])
+    uploaded_file = st.file_uploader("Upload your C++ code", type=["cpp"], key="pointing_upload")
+    if uploaded_file is not None:
+        cpp_code = uploaded_file.read().decode("utf-8")
+        if st.button("Submit Code", key="pointing_submit"):
+            with st.spinner("Grading..."):
+                results = grade_problem(PROBLEMS["Pointing"]["folder"], cpp_code)
+            st.success("Grading complete!")
+            for idx, result in enumerate(results):
+                if result[1]:
+                    st.write(f"Test case {result[0]}: ✅ Passed")
+                else:
+                    st.write(f"Test case {result[0]}: ❌ Failed")
+                    st.write(f"Expected: {result[3]}")
+                    st.write(f"Got: {result[2]}")
 
-user_code = st.text_area("Write your code here", height=200, value=f'{problem["function_definition"]}\n    pass')
+with tab2:
+    st.header("Stonks Problem")
+    st.write(PROBLEMS["Stonks"]["description"])
 
-if st.button("Submit"):
-    with st.spinner("Grading..."):
-        results = execute_user_code(user_code, problem["function_name"], test_cases)
-        st.success("Grading complete!")
-
-    st.write("## Results")
-    for result in results:
-        st.write(f"Input: {result['input']}")
-        st.write(f"Expected Output: {result['expected']}")
-        st.write(f"Your Output: {result['output']}")
-        st.write(f"Passed: {'✅' if result['passed'] else '❌'}")
-        st.write("---")
-
-st.sidebar.write("### Constraints")
-st.sidebar.write(problem["constraints"])
+    uploaded_file = st.file_uploader("Upload your C++ code", type=["cpp"], key="stonks_upload")
+    if uploaded_file is not None:
+        cpp_code = uploaded_file.read().decode("utf-8")
+        if st.button("Submit Code", key="stonks_submit"):
+            with st.spinner("Grading..."):
+                results = grade_problem(PROBLEMS["Stonks"]["folder"], cpp_code)
+            st.success("Grading complete!")
+            for idx, result in enumerate(results):
+                if result[1]:
+                    st.write(f"Test case {result[0]}: ✅ Passed")
+                else:
+                    st.write(f"Test case {result[0]}: ❌ Failed")
+                    st.write(f"Expected: {result[3]}")
+                    st.write(f"Got: {result[2]}")
