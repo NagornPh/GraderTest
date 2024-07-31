@@ -70,16 +70,18 @@ def display_results(results):
     score = num_passed * 10
     percentage_score = (num_passed / 10) * 100
 
-    st.write(f"## Results")
-    st.write(f"Score: {score} / 100")
-
+    st.markdown(f"## Results", unsafe_allow_html=True)
+    st.markdown(f"**Score: {score} / 100**", unsafe_allow_html=True)
+    st.markdown(f"**Percentage: {percentage_score:.2f}%**", unsafe_allow_html=True)
+    
+    st.markdown("### Detailed Results", unsafe_allow_html=True)
     for idx, result in enumerate(results):
         if result[1]:
-            st.write(f"Test case {result[0]}: ✅ Passed")
+            st.write(f"**Test case {result[0]}:** ✅ Passed")
         else:
-            st.write(f"Test case {result[0]}: ❌ Failed")
-            st.write(f"Expected: {result[3]}")
-            st.write(f"Got: {result[2]}")
+            st.write(f"**Test case {result[0]}:** ❌ Failed")
+            st.write(f"**Expected:** {result[3]}")
+            st.write(f"**Got:** {result[2]}")
 
 with tab1:
     st.header("Pointing Problem")
