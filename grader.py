@@ -1,11 +1,20 @@
 import json
+import os
 
 def load_problem(problem_id):
-    with open(f'problems/{problem_id}.json', 'r') as f:
+    base_path = os.path.dirname(__file__)
+    problem_path = os.path.join(base_path, 'Problems', f'{problem_id}.json')
+    if not os.path.exists(problem_path):
+        raise FileNotFoundError(f'Problem file not found: {problem_path}')
+    with open(problem_path, 'r') as f:
         return json.load(f)
 
 def load_test_cases(problem_id):
-    with open(f'test_cases/{problem_id}_test_cases.json', 'r') as f:
+    base_path = os.path.dirname(__file__)
+    test_case_path = os.path.join(base_path, 'Problems', f'{problem_id}_test_cases.json')
+    if not os.path.exists(test_case_path):
+        raise FileNotFoundError(f'Test case file not found: {test_case_path}')
+    with open(test_case_path, 'r') as f:
         return json.load(f)
 
 def execute_user_code(user_code, func_name, test_cases):
