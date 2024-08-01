@@ -92,18 +92,16 @@ def grade_problem(problem_folder, cpp_code):
     return results
 
 # Streamlit app
-st.title("Grader Website")
+st.title("The New And Better PDS Grader")
 
 tab1, tab2 = st.tabs(["Pointing", "Stonks"])
 
 def display_results(results):
     num_passed = sum(result[1] for result in results)
     score = num_passed * 10
-    percentage_score = (num_passed / 10) * 100
 
     st.markdown(f"## Results", unsafe_allow_html=True)
     st.markdown(f"**Score: {score} / 100**", unsafe_allow_html=True)
-    st.markdown(f"**Percentage: {percentage_score:.2f}%**", unsafe_allow_html=True)
     
     st.markdown("### Detailed Results", unsafe_allow_html=True)
     for result in results:
