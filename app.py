@@ -40,13 +40,13 @@ def run_cpp_code(cpp_code, input_data):
     except subprocess.TimeoutExpired:
         process.kill()
         user_output, error = process.communicate()
-        return "Execution timed out", None, None, None
+        return "Execution timed out", None, 1012, psutil.Process(process.pid).memory_info().rss // 1024
 
     end_time = time.time()
     elapsed_time_ms = (end_time - start_time) * 1000
 
     # Memory usage in kilobytes
-    memory_used_kb = psutil.Process(process.pid).memory_info().rss // 1024 if process.poll() is None else 0
+    memory_used_kb = psutil.Process(process.pid).memory_info().rss // 1024
 
     # Clean up the temporary files
     os.remove(cpp_file_path)
@@ -73,10 +73,16 @@ def grade_problem(problem_folder, cpp_code):
         error, user_output, elapsed_time_ms, memory_used_kb = run_cpp_code(cpp_code, input_data)
         
         if error:
-            results.append((i, False, error, elapsed_time_ms, memory_used_kb))
+            if "Execution timed out" in error:
+                results.append((i, False, "Time Limit Exceeded", elapsed_time_ms, memory_used_kb))
+            else:
+                results.append((i, False, "Wrong Answer", elapsed_time_ms, memory_used_kb))
         else:
             passed = user_output == expected_output
-            results.append((i, passed, user_output, expected_output, elapsed_time_ms, memory_used_kb))
+            if passed:
+                results.append((i, True, "Passed", elapsed_time_ms, memory_used_kb))
+            else:
+                results.append((i, False, "Wrong Answer", elapsed_time_ms, memory_used_kb))
     
     return results
 
@@ -95,11 +101,9 @@ def display_results(results):
     st.markdown(f"**Percentage: {percentage_score:.2f}%**", unsafe_allow_html=True)
     
     st.markdown("### Detailed Results", unsafe_allow_html=True)
-    for idx, result in enumerate(results):
-        if result[1]:
-            st.write(f"**Test case {result[0]}:** ✅ Passed in {result[4]:.2f} ms using {result[5]} kB")
-        else:
-            st.write(f"**Test case {result[0]}:** ❌ Failed in {result[3]:.2f} ms using {result[4]} kB")
+    for result in results:
+        status = "✅ Passed" if result[1] else f"❌ {result[2]}"
+        st.write(f"**Test case {result[0]}:** {status} - {result[3]:.2f} ms - {result[4]} kB")
 
 with tab1:
     st.header("Pointing Problem")
