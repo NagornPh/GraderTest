@@ -1,10 +1,14 @@
 import streamlit as st
+from streamlit_option_menu import option_menu
 
 # Define the pages to navigate
-page = st.sidebar.selectbox(
-    "Navigation",
-    ["Home", "Problems", "Submissions", "About"]
-)
+with st.sidebar:
+    page = option_menu(
+        "Pages",
+        ["Home", "Problems", "Submissions", "About"],
+        icons=["house", "clipboard", "file-earmark-text", "info-circle"],
+        default_index=0
+    )
 
 if page == "Home":
     import Pages.home
