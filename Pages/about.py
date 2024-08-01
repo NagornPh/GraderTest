@@ -1,6 +1,7 @@
 import streamlit as st
 
 st.title("About")
-st.write("This application allows users to submit and grade C++ code based on given problems.")
-st.write("You can select a problem, submit your code, and get feedback on your performance.")
+st.write("เว็บไซต์ grader71.vercel.app นี้ถูกสร้างขึ้นโดยกลุ่มนักเรียน PDS 71 สำหรับหลักสูตร Gifted Computer ในโรงเรียนของพวกเรา ซึ่งจัดทำขึ้นเพื่อสอนนักเรียนทั้งด้านคณิตศาสตร์และการเขียนโปรแกรม (โดยเว็บไซต์นี้เน้นไปที่ส่วนของการเขียนโปรแกรม) เพื่อเตรียมตัวสำหรับการทดสอบสอวน.เป็นหลัก
+โจทย์ปัญหาต่างๆที่ใช้ในเว็บไซต์นี้ถูกเขียนโดยนักเรียนที่เรียนในโปรแกรม Gifted Computer เอง
+- PDS 71 -")
 
