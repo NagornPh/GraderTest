@@ -3,8 +3,8 @@ from streamlit_option_menu import option_menu
 
 # Define the pages to navigate
 with st.sidebar:
-    "Pages",
     page = option_menu(
+        "Pages",
         ["Home", "Problems", "Submissions", "About"],
         icons=["house", "clipboard", "file-earmark-text", "info-circle"],
         default_index=0
