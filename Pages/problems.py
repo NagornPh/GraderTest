@@ -92,7 +92,7 @@ def grade_problem(problem_folder, cpp_code):
     return results
 
 # Streamlit app
-st.title("Problems Page")
+st.title("Problems")
 
 tab1, tab2 = st.tabs(["Pointing", "Stonks"])
 
