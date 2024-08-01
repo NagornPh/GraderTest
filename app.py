@@ -6,11 +6,11 @@ from tempfile import NamedTemporaryFile
 # Problem configurations
 PROBLEMS = {
     "Pointing": {
-        "description_file": "Problems/Pointing/Pointing.txt",
+        "description_file": "Problems/Pointing/Pointing.pdf",
         "folder": "Problems/Pointing"
     },
     "Stonks": {
-        "description_file": "Problems/Stonks/Stonks.txt",
+        "description_file": "Problems/Stonks/Stonks.pdf",
         "folder": "Problems/Stonks"
     }
 }
