@@ -2,6 +2,8 @@ import streamlit as st
 import os
 import subprocess
 from tempfile import NamedTemporaryFile
+import time
+import psutil
 
 # Problem configurations
 PROBLEMS = {
@@ -26,16 +28,30 @@ def run_cpp_code(cpp_code, input_data):
     compile_process = subprocess.run(['g++', cpp_file_path, '-o', exe_file_path], capture_output=True, text=True)
     
     if compile_process.returncode != 0:
-        return compile_process.stderr, None
+        return compile_process.stderr, None, None, None
 
-    # Run the compiled code with input_data
-    run_process = subprocess.run([exe_file_path], input=input_data, capture_output=True, text=True)
+    # Measure time and memory usage
+    start_time = time.time()
+    process = subprocess.Popen([exe_file_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+    process.stdin.write(input_data)
+    process.stdin.close()
+    
+    # Memory usage in kilobytes
+    memory_info = psutil.Process(process.pid).memory_info()
+    memory_used_kb = memory_info.rss // 1024
+    
+    user_output, error = process.communicate()
+    end_time = time.time()
+    elapsed_time_ms = (end_time - start_time) * 1000
 
     # Clean up the temporary files
     os.remove(cpp_file_path)
     os.remove(exe_file_path)
 
-    return None, run_process.stdout.strip()
+    if process.returncode != 0:
+        return error, None, elapsed_time_ms, memory_used_kb
+
+    return None, user_output.strip(), elapsed_time_ms, memory_used_kb
 
 def grade_problem(problem_folder, cpp_code):
     results = []
@@ -50,13 +66,13 @@ def grade_problem(problem_folder, cpp_code):
         with open(output_file, 'r') as f:
             expected_output = f.read().strip()
 
-        error, user_output = run_cpp_code(cpp_code, input_data)
+        error, user_output, elapsed_time_ms, memory_used_kb = run_cpp_code(cpp_code, input_data)
         
         if error:
-            results.append((i, False, error))
+            results.append((i, False, error, elapsed_time_ms, memory_used_kb))
         else:
             passed = user_output == expected_output
-            results.append((i, passed, user_output, expected_output))
+            results.append((i, passed, user_output, expected_output, elapsed_time_ms, memory_used_kb))
     
     return results
 
@@ -77,11 +93,9 @@ def display_results(results):
     st.markdown("### Detailed Results", unsafe_allow_html=True)
     for idx, result in enumerate(results):
         if result[1]:
-            st.write(f"**Test case {result[0]}:** ✅ Passed")
+            st.write(f"**Test case {result[0]}:** ✅ Passed in {result[4]:.2f} ms using {result[5]} kB")
         else:
-            st.write(f"**Test case {result[0]}:** ❌ Failed")
-            st.write(f"**Expected:** {result[3]}")
-            st.write(f"**Got:** {result[2]}")
+            st.write(f"**Test case {result[0]}:** ❌ Failed in {result[3]:.2f} ms using {result[4]} kB")
 
 with tab1:
     st.header("Pointing Problem")
