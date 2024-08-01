@@ -4,7 +4,7 @@ from streamlit_option_menu import option_menu
 # Define the pages to navigate
 with st.sidebar:
     page = option_menu(
-        "Navigation",
+        "The New And Better PDS Grader",
         ["Home", "Problems", "Submissions", "About"],
         icons=["house", "clipboard", "file-earmark-text", "info-circle"],
         default_index=0
