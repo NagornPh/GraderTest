@@ -1,23 +1,17 @@
 import streamlit as st
-from streamlit_cookies_manager import EncryptedCookieManager
 
-# Initialize cookies manager
-cookies = EncryptedCookieManager(
-    prefix="my_app_",
-    secret_key="my_secret_key",
-    cookie_expiration_days=30
-)
-cookies.load()
+# In-memory user store
+user_db = {
+    "admin": "password123"  # Example user; replace with your own logic
+}
 
 # Function to handle login
 def login():
     st.session_state["logged_in"] = True
-    cookies["logged_in"] = "true"
 
 # Function to handle logout
 def logout():
     st.session_state["logged_in"] = False
-    cookies.pop("logged_in", None)
 
 # Authentication page
 def authentication_page():
@@ -37,13 +31,14 @@ def authentication_page():
         if mode == "Sign Up":
             if st.button("Sign Up"):
                 if user_id and password:
-                    create_user(user_id, password)
+                    # Add user to in-memory DB
+                    user_db[user_id] = password
                     st.success("User created successfully! Please log in.")
                 else:
                     st.warning("Please enter both username and password.")
         elif mode == "Log In":
             if st.button("Log In"):
-                if authenticate_user(user_id, password):
+                if user_id in user_db and user_db[user_id] == password:
                     login()
                     st.success("Logged in successfully!")
                     st.experimental_rerun()
