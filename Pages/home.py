@@ -13,11 +13,16 @@ def login():
 def logout():
     st.session_state["logged_in"] = False
 
+# Function to check if user is logged in
+def check_login():
+    if "logged_in" not in st.session_state:
+        st.session_state["logged_in"] = False
+
 # Authentication page
 def authentication_page():
     st.title("Sign Up / Log In")
 
-    if "logged_in" in st.session_state and st.session_state["logged_in"]:
+    if st.session_state["logged_in"]:
         st.write("You are already logged in.")
         if st.button("Log Out"):
             logout()
@@ -47,7 +52,9 @@ def authentication_page():
 
 # Define the Home page
 def home_page():
-    if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
+    check_login()
+
+    if not st.session_state["logged_in"]:
         authentication_page()
     else:
         st.title("Home Page")
