@@ -86,14 +86,14 @@ def display_results(results):
 with tab1:
     st.header("Pointing Problem")
     
-    with open(PROBLEMS["Pointing"]["description_file"], "r") as f:
+    with open(PROBLEMS["Pointing"]["description_file"], "rb") as f:
         pointing_description = f.read()
     
     st.download_button(
         label="Download Pointing Problem Statement",
         data=pointing_description,
-        file_name="Pointing.txt",
-        mime="text/plain"
+        file_name="Pointing.pdf",
+        mime="application/pdf"
     )
 
     cpp_code = st.text_area("Paste your C++ code here", height=300)
@@ -114,14 +114,14 @@ with tab1:
 with tab2:
     st.header("Stonks Problem")
     
-    with open(PROBLEMS["Stonks"]["description_file"], "r") as f:
+    with open(PROBLEMS["Stonks"]["description_file"], "rb") as f:
         stonks_description = f.read()
     
     st.download_button(
         label="Download Stonks Problem Statement",
         data=stonks_description,
-        file_name="Stonks.txt",
-        mime="text/plain"
+        file_name="Stonks.pdf",
+        mime="application/pdf"
     )
 
     cpp_code = st.text_area("Paste your C++ code here", height=300, key="stonks_code")
