@@ -1,5 +1,5 @@
 import streamlit as st
 
-st.title("Home")
+st.title("The New And Better PDS Grader: Home")
 st.write("Welcome to the Home page. (Content to be added later.)")
 
