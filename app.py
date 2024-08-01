@@ -18,3 +18,5 @@ elif page == "Submissions":
     import Pages.submissions
 elif page == "About":
     import Pages.about
+
+#bruh
