@@ -6,11 +6,11 @@ from tempfile import NamedTemporaryFile
 # Problem configurations
 PROBLEMS = {
     "Pointing": {
-        "description": "Description of the pointing problem...",
+        "description_file": "Problems/Pointing/Pointing.txt",
         "folder": "Problems/Pointing"
     },
     "Stonks": {
-        "description": "Description of the stonks problem...",
+        "description_file": "Problems/Stonks/Stonks.txt",
         "folder": "Problems/Stonks"
     }
 }
@@ -85,7 +85,16 @@ def display_results(results):
 
 with tab1:
     st.header("Pointing Problem")
-    st.write(PROBLEMS["Pointing"]["description"])
+    
+    with open(PROBLEMS["Pointing"]["description_file"], "r") as f:
+        pointing_description = f.read()
+    
+    st.download_button(
+        label="Download Pointing Problem Statement",
+        data=pointing_description,
+        file_name="Pointing.txt",
+        mime="text/plain"
+    )
 
     cpp_code = st.text_area("Paste your C++ code here", height=300)
     uploaded_file = st.file_uploader("Or upload a C++ file", type=["cpp"], key="pointing_upload")
@@ -104,7 +113,16 @@ with tab1:
 
 with tab2:
     st.header("Stonks Problem")
-    st.write(PROBLEMS["Stonks"]["description"])
+    
+    with open(PROBLEMS["Stonks"]["description_file"], "r") as f:
+        stonks_description = f.read()
+    
+    st.download_button(
+        label="Download Stonks Problem Statement",
+        data=stonks_description,
+        file_name="Stonks.txt",
+        mime="text/plain"
+    )
 
     cpp_code = st.text_area("Paste your C++ code here", height=300, key="stonks_code")
     uploaded_file = st.file_uploader("Or upload a C++ file", type=["cpp"], key="stonks_upload")
