@@ -1,7 +1,7 @@
 import streamlit as st
 from streamlit_option_menu import option_menu
 
-# Define the pages to navigate
+# Define the pages
 with st.sidebar:
     page = option_menu(
         "Pages",
