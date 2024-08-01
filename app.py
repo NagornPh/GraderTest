@@ -19,4 +19,4 @@ elif page == "Submissions":
 elif page == "About":
     import Pages.about
 
-#bruh1
+#bruh1a
