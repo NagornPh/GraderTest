@@ -1,14 +1,16 @@
 import streamlit as st
-from Pages import home, problems, submissions, about
 
-with st.sidebar:
-    page = st.radio("Pages", ["Home", "Problems", "Submissions", "About"], index=0)
+# Define the pages to navigate
+page = st.sidebar.selectbox(
+    "Navigation",
+    ["Home", "Problems", "Submissions", "About"]
+)
 
 if page == "Home":
-    home.render_home_page()
+    import Pages.home
 elif page == "Problems":
-    problems.render_problems_page()
+    import Pages.problems
 elif page == "Submissions":
-    submissions.render_submissions_page()
+    import Pages.submissions
 elif page == "About":
-    about.render_about_page()
+    import Pages.about
