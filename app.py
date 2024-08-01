@@ -1,21 +1,14 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
+from Pages import home, problems, submissions, about
 
-# Define the pages
 with st.sidebar:
-    page = option_menu(
-        "Pages",
-        ["Home", "Problems", "Submissions", "About"],
-        icons=["house", "clipboard", "file-earmark-text", "info-circle"],
-        default_index=0
-    )
+    page = st.radio("Pages", ["Home", "Problems", "Submissions", "About"], index=0)
 
-# Page routing
 if page == "Home":
-    import Pages.home
+    home.render_home_page()
 elif page == "Problems":
-    import Pages.problems
+    problems.render_problems_page()
 elif page == "Submissions":
-    import Pages.submissions
+    submissions.render_submissions_page()
 elif page == "About":
-    import Pages.about
+    about.render_about_page()
