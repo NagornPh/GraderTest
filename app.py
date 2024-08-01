@@ -28,26 +28,30 @@ def run_cpp_code(cpp_code, input_data):
     compile_process = subprocess.run(['g++', cpp_file_path, '-o', exe_file_path], capture_output=True, text=True)
     
     if compile_process.returncode != 0:
+        os.remove(cpp_file_path)
+        os.remove(exe_file_path)
         return compile_process.stderr, None, None, None
 
     # Measure time and memory usage
     start_time = time.time()
     process = subprocess.Popen([exe_file_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
     
-    memory_used_kb = 0
     try:
-        with psutil.Process(process.pid) as p:
-            user_output, error = process.communicate(input=input_data, timeout=10)
-            memory_used_kb = p.memory_info().rss // 1024
+        user_output, error = process.communicate(input=input_data, timeout=10)
     except subprocess.TimeoutExpired:
         process.kill()
         user_output, error = process.communicate()
-        return "Execution timed out", None, 1012, memory_used_kb
-    except psutil.NoSuchProcess:
-        return "Process ended prematurely", None, 0, memory_used_kb
+        elapsed_time_ms = (time.time() - start_time) * 1000
+        memory_used_kb = 0
+        return "Execution timed out", None, elapsed_time_ms, memory_used_kb
 
     end_time = time.time()
     elapsed_time_ms = (end_time - start_time) * 1000
+
+    try:
+        memory_used_kb = psutil.Process(process.pid).memory_info().rss // 1024
+    except psutil.NoSuchProcess:
+        memory_used_kb = 0
 
     # Clean up the temporary files
     os.remove(cpp_file_path)
@@ -103,8 +107,8 @@ def display_results(results):
     
     st.markdown("### Detailed Results", unsafe_allow_html=True)
     for result in results:
-        status = "✅ Passed" if result[1] else f"❌ {result[2]}"
-        st.write(f"**Test case {result[0]}:** {status} - {result[3]:.2f} ms - {result[4]} kB")
+        status = f"{result[2]} - {result[3]:.2f} ms - {result[4]} kB"
+        st.write(f"**Test case {result[0]}:** ❌ {status}" if not result[1] else f"**Test case {result[0]}:** ✅ {status}")
 
 with tab1:
     st.header("Pointing Problem")
