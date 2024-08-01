@@ -10,7 +10,7 @@ with st.sidebar:
         default_index=0
     )
 
-# Page routing
+# Page routinga
 if page == "Home":
     import Pages.home
 elif page == "Problems":
