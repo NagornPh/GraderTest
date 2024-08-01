@@ -33,22 +33,20 @@ def run_cpp_code(cpp_code, input_data):
     # Measure time and memory usage
     start_time = time.time()
     process = subprocess.Popen([exe_file_path], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    
+
     try:
         # Provide input data and capture output
         user_output, error = process.communicate(input=input_data, timeout=10)
-        
-        # Memory usage in kilobytes
-        memory_info = psutil.Process(process.pid).memory_info()
-        memory_used_kb = memory_info.rss // 1024
-        
     except subprocess.TimeoutExpired:
         process.kill()
         user_output, error = process.communicate()
         return "Execution timed out", None, None, None
-    
+
     end_time = time.time()
     elapsed_time_ms = (end_time - start_time) * 1000
+
+    # Memory usage in kilobytes
+    memory_used_kb = psutil.Process(process.pid).memory_info().rss // 1024 if process.poll() is None else 0
 
     # Clean up the temporary files
     os.remove(cpp_file_path)
