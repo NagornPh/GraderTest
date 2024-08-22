@@ -17,24 +17,18 @@ elif selected_tab == "Trips":
 
     with trip_tabs[0]:
         st.header("Tokyo Deluxe Plan")
-        st.write("Enjoy a luxurious trip to Tokyo with the finest experiences for the cheap price of 1.3M thb.")
-
-        # Define buttons
-        brochure = st.button("Brochure")
-        trip_details = st.button("Trip Details")
-        book = st.button("Book")
+        st.write("Enjoy a luxurious trip to Tokyo with the finest experiences.")
 
         # Brochure button functionality
-        if brochure:
+        if st.button("Brochure"):
             brochure_content = BytesIO(b"Tokyo Deluxe Plan Brochure")
-            st.download_button(label="Download Brochure", data=brochure_content, file_name="Tokyo_Deluxe_Brochure.pdf")
+            st.download_button(label="", data=brochure_content, file_name="Tokyo_Deluxe_Brochure.pdf")
 
         # Trip Details button functionality
-        if trip_details:
+        if st.button("Trip Details"):
             trip_details_content = BytesIO(b"Tokyo Deluxe Plan Detailed Information")
-            st.download_button(label="Download Trip Details", data=trip_details_content, file_name="Tokyo_Deluxe_Details.pdf")
+            st.download_button(label="", data=trip_details_content, file_name="Tokyo_Deluxe_Details.pdf")
 
         # Book button functionality
-        if book:
+        if st.button("Book"):
             st.write("To be continued...")
-
