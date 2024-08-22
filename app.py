@@ -30,5 +30,5 @@ if choice == "Trips":
         
         # Handle Book action
         if book:
-            st.subheader("To be continued...")
+            st.write("TO BE CONTINUED..................................")
 
