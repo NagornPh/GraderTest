@@ -20,12 +20,12 @@ if choice == "Trips":
         
         # Handle Brochure download
         if brochure:
-            with open("files/brochure.pdf", "rb") as file:
+            with open("tripfiles/brochure.pdf", "rb") as file:
                 st.download_button(label="Download Brochure", data=file, file_name="brochure.pdf")
 
         # Handle Trip Details download
         if details:
-            with open("files/trip_details.pdf", "rb") as file:
+            with open("tripfiles/trip_details.pdf", "rb") as file:
                 st.download_button(label="Download Trip Details", data=file, file_name="trip_details.pdf")
         
         # Handle Book action
