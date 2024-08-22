@@ -4,4 +4,4 @@ import streamlit as st
 st.set_page_config(page_title="notafaketrip.com")
 
 # Title of the website
-st.title("HTTPS://NOTAFAKETRIP.STREAMLIT.APP")
+st.title("NOTAFAKETRIP.COM")
