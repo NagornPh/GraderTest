@@ -1,34 +1,34 @@
 import streamlit as st
-from io import BytesIO
 
-# Set the title of the website
+# Website name and title
 st.set_page_config(page_title="notafaketrip.com")
 
-# Define the menu tabs
-menu_tabs = ["Home", "Trips"]
-selected_tab = st.sidebar.radio("Menu", menu_tabs)
+# Title of the website
+st.title("notafaketrip.com")
 
-if selected_tab == "Home":
-    st.title("Welcome to notafaketrip.com!")
-    st.write("Explore amazing travel packages and plan your next adventure.")
+# Menu - Sidebar
+menu = ["Home", "Trips"]
+choice = st.sidebar.selectbox("Menu", menu)
 
-elif selected_tab == "Trips":
-    trip_tabs = st.tabs(["Tokyo Deluxe Plan"])
+if choice == "Trips":
+    st.subheader("Available Trips")
+    if st.button("Tokyo Deluxe Plan"):
+        # Buttons for Brochure, Trip Details, and Book
+        brochure = st.button("Brochure")
+        details = st.button("Trip Details")
+        book = st.button("Book")
+        
+        # Handle Brochure download
+        if brochure:
+            with open("files/brochure.pdf", "rb") as file:
+                st.download_button(label="Download Brochure", data=file, file_name="brochure.pdf")
 
-    with trip_tabs[0]:
-        st.header("Tokyo Deluxe Plan")
-        st.write("Enjoy a luxurious trip to Tokyo with the finest experiences.")
+        # Handle Trip Details download
+        if details:
+            with open("files/trip_details.pdf", "rb") as file:
+                st.download_button(label="Download Trip Details", data=file, file_name="trip_details.pdf")
+        
+        # Handle Book action
+        if book:
+            st.subheader("To be continued...")
 
-        # Brochure button functionality
-        if st.button("Brochure"):
-            brochure_content = BytesIO(b"Tokyo Deluxe Plan Brochure")
-            st.download_button(label="", data=brochure_content, file_name="Tokyo_Deluxe_Brochure.pdf")
-
-        # Trip Details button functionality
-        if st.button("Trip Details"):
-            trip_details_content = BytesIO(b"Tokyo Deluxe Plan Detailed Information")
-            st.download_button(label="", data=trip_details_content, file_name="Tokyo_Deluxe_Details.pdf")
-
-        # Book button functionality
-        if st.button("Book"):
-            st.write("To be continued...")
