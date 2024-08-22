@@ -17,7 +17,7 @@ elif selected_tab == "Trips":
 
     with trip_tabs[0]:
         st.header("Tokyo Deluxe Plan")
-        st.write("Enjoy a luxurious trip to Tokyo with the finest experiences.")
+        st.write("Enjoy a luxurious trip to Tokyo with the finest experiences for the cheap price of 1.3M thb.")
 
         # Define buttons
         brochure = st.button("Brochure")
