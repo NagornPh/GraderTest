@@ -14,5 +14,5 @@ pdf_path = f"./tripfiles/trip_details.pdf"
 with open(pdf_path, "rb") as pdf:
     st.download_button("Download Tokyo Trip Details", data=pdf.read(), file_name="trip_details.pdf")
     
-st.write("Trip Itenerary Video: https://drive.google.com/file/d/1zAh8Nmmghsu9PA3I6fHJIqYmxdF7lxn1/view?usp=drivesdk")
+st.write("Trip Itenerary Video: https://drive.google.com/file/d/1YFW-nTt7Ys61NVEwUwz2E9s-c7O9sPI9/view?usp=drivesdk")
 st.write("Extra video: https://youtu.be/QB7ACr7pUuE?si=G8EdFbi0d6af9_Rx")
